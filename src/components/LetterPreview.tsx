@@ -1,5 +1,6 @@
 import { getLetterTemplate } from '../config/templates'
 import type { LetterData } from '../types/letter'
+import { Polaroid } from './Polaroid'
 import { SectionTitle } from './SectionTitle'
 
 interface LetterPreviewProps {
@@ -33,22 +34,15 @@ export function LetterPreview({ data }: LetterPreviewProps) {
           <div
             className="relative aspect-square w-[110%]"
             style={{
-              transform: `translate(-5%, -30%) rotate(${-template.rotation}deg)`,
+              transform: 'translate(-5%, -30%)',
             }}
           >
-            <img
-              alt=""
-              aria-hidden="true"
-              className="absolute inset-0 size-full object-contain"
-              src={template.polaroid}
+            <Polaroid
+              accentColor={template.accent}
+              className="absolute top-[4%] left-[8%] w-[84%] rounded-[2.5%]"
+              photoAlt={`Foto de ${petName}`}
+              photoUrl={data.photoUrl}
             />
-            {data.photoUrl && (
-              <img
-                alt={`Foto de ${petName}`}
-                className="absolute top-[17%] left-[14%] h-[59%] w-[70%] -rotate-2 object-cover"
-                src={data.photoUrl}
-              />
-            )}
           </div>
 
           <div className="flex min-w-0 flex-col text-left">
