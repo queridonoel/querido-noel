@@ -15,6 +15,9 @@
 
   --font-heading: 'Fredoka Variable', sans-serif;
   --font-sans: 'Nunito Variable', sans-serif;
+
+  --radius-container: 1.5rem;
+  --shadow-soft: 0 0.75rem 2rem rgb(64 51 45 / 8%);
 }
 
 @layer base {

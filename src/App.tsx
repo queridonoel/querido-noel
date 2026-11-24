@@ -1,5 +1,7 @@
+import { MainContainer } from './components/MainContainer'
+
 function App() {
-  return null
+  return <MainContainer />
 }
 
 export default App
