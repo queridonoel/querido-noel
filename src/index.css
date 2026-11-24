@@ -33,6 +33,10 @@
     min-height: 100dvh;
   }
 
+  #root {
+    display: flow-root;
+  }
+
   body {
     margin: 0;
     background-color: var(--color-background);
