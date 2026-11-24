@@ -1,9 +1,35 @@
+import { useEffect, useState } from 'react'
 import cat from '../assets/cat.png'
 import dog from '../assets/dog.png'
 import envelope from '../assets/envelope.svg'
+import type { LetterData } from '../types/letter'
+import { LetterPreview } from './LetterPreview'
 import { LetterForm } from './form/LetterForm'
 
+const initialLetter: LetterData = {
+  contact: '',
+  institution: '',
+  message: '',
+  petName: '',
+  petType: '',
+  photoUrl: '',
+  template: 'classic',
+}
+
 export function MainContainer() {
+  const [letter, setLetter] = useState(initialLetter)
+
+  useEffect(() => {
+    const photoUrl = letter.photoUrl
+    return () => {
+      if (photoUrl) URL.revokeObjectURL(photoUrl)
+    }
+  }, [letter.photoUrl])
+
+  function updateLetter(updates: Partial<LetterData>) {
+    setLetter((current) => ({ ...current, ...updates }))
+  }
+
   return (
     <div className="relative isolate mx-auto mt-28 w-[calc(100%-2rem)] max-w-[1200px] sm:mt-42 sm:w-[calc(100%-3rem)] lg:w-[calc(100%-4rem)]">
       <img
@@ -32,9 +58,9 @@ export function MainContainer() {
             />
           ))}
         </div>
-        <LetterForm />
+        <LetterForm data={letter} onChange={updateLetter} />
         <div aria-hidden="true" className="hidden bg-border lg:block" />
-        <div className="hidden lg:block" />
+        <LetterPreview data={letter} />
       </main>
     </div>
   )

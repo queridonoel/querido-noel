@@ -1,18 +1,14 @@
 import { useState, type ChangeEvent } from 'react'
 import { House, PawPrint, Phone } from 'lucide-react'
+import { letterTemplates } from '../../config/templates'
+import type { LetterData, PetType, TemplateId } from '../../types/letter'
+import { SectionTitle } from '../SectionTitle'
 import {
   InputField,
   SelectField,
   TextareaField,
   UploadField,
 } from './FormControls'
-
-const templates = [
-  ['#642A78', '#F2DAF5'],
-  ['#C92D35', '#FFF0EE'],
-  ['#F4A321', '#FFF1C9'],
-  ['#8C7768', '#F4E9DD'],
-]
 
 function formatPhone(value: string) {
   const digits = value.replace(/\D/g, '').slice(0, 11)
@@ -24,23 +20,14 @@ function formatPhone(value: string) {
   return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`
 }
 
-function SectionTitle({ children }: { children: string }) {
-  return (
-    <h2 className="flex items-center gap-2 font-heading text-xl font-semibold text-primary">
-      <span className="grid size-8 shrink-0 place-items-center rounded-full bg-christmas-red text-white">
-        <PawPrint aria-hidden="true" className="size-5" fill="currentColor" />
-      </span>
-      {children}
-    </h2>
-  )
+interface LetterFormProps {
+  data: LetterData
+  onChange: (updates: Partial<LetterData>) => void
 }
 
-export function LetterForm() {
-  const [message, setMessage] = useState('')
-  const [phone, setPhone] = useState('')
+export function LetterForm({ data, onChange }: LetterFormProps) {
   const [fileName, setFileName] = useState('')
   const [fileError, setFileError] = useState('')
-  const [selectedTemplate, setSelectedTemplate] = useState(0)
 
   function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0]
@@ -58,6 +45,7 @@ export function LetterForm() {
       return
     }
     setFileName(file.name)
+    onChange({ photoUrl: URL.createObjectURL(file) })
   }
 
   return (
@@ -76,9 +64,11 @@ export function LetterForm() {
           id="pet-name"
           label="Nome do pet"
           name="petName"
+          onChange={(event) => onChange({ petName: event.target.value })}
           placeholder="Ex.: Mel, Thor, Nina"
           required
           type="text"
+          value={data.petName}
         />
         <SelectField
           icon={
@@ -88,11 +78,14 @@ export function LetterForm() {
               fill="currentColor"
             />
           }
-          defaultValue=""
           id="pet-type"
           label="Tipo de pet"
           name="petType"
+          onChange={(event) =>
+            onChange({ petType: event.target.value as PetType })
+          }
           required
+          value={data.petType}
         >
           <option disabled value="">
             Selecione...
@@ -114,9 +107,11 @@ export function LetterForm() {
           id="institution"
           label="Nome da ONG ou canil"
           name="institution"
+          onChange={(event) => onChange({ institution: event.target.value })}
           placeholder="Ex.: Canil Amigo"
           required
           type="text"
+          value={data.institution}
         />
         <InputField
           icon={
@@ -126,24 +121,26 @@ export function LetterForm() {
           inputMode="tel"
           label="Contato"
           name="contact"
-          onChange={(event) => setPhone(formatPhone(event.target.value))}
+          onChange={(event) =>
+            onChange({ contact: formatPhone(event.target.value) })
+          }
           placeholder="Ex.: (11) 99999-9999"
           required
           type="tel"
-          value={phone}
+          value={data.contact}
         />
       </div>
 
       <TextareaField
-        count={message.length}
+        count={data.message.length}
         id="request"
         label="O que eu quero de Natal?"
         maxLength={300}
         name="request"
-        onChange={(event) => setMessage(event.target.value)}
+        onChange={(event) => onChange({ message: event.target.value })}
         placeholder="Conte o que o pet precisa, seu desejo de Natal ou como ele pode fazer parte de uma nova família..."
         required
-        value={message}
+        value={data.message}
       />
 
       <section aria-labelledby="template-heading">
@@ -159,26 +156,28 @@ export function LetterForm() {
           className="grid grid-cols-4 gap-3"
           role="radiogroup"
         >
-          {templates.map(([color, background], index) => (
-            <label className="cursor-pointer" key={color}>
+          {letterTemplates.map((template, index) => (
+            <label className="cursor-pointer" key={template.name}>
               <input
-                checked={selectedTemplate === index}
+                checked={data.template === template.id}
                 className="peer sr-only"
                 name="template"
-                onChange={() => setSelectedTemplate(index)}
+                onChange={() =>
+                  onChange({ template: template.id as TemplateId })
+                }
                 type="radio"
                 value={index}
               />
-              <span
-                className="block aspect-[4/3] rounded-lg border-2 border-transparent p-2 transition hover:-translate-y-0.5 hover:border-primary/35 peer-checked:border-primary peer-checked:ring-2 peer-checked:ring-primary/15 peer-focus-visible:ring-2 peer-focus-visible:ring-primary"
-                style={{ backgroundColor: background }}
-              >
-                <span
-                  className="block h-full rounded-md border border-white/70"
-                  style={{ backgroundColor: color }}
+              <span className="block aspect-square overflow-hidden rounded-lg border-2 border-transparent transition hover:-translate-y-0.5 peer-checked:ring-2 peer-checked:ring-christmas-red/35 peer-focus-visible:ring-2 peer-focus-visible:ring-primary">
+                <img
+                  alt={`Template ${template.name}`}
+                  className="h-full w-full object-cover"
+                  src={template.post}
                 />
               </span>
-              <span className="sr-only">Template {index + 1}</span>
+              <span className="sr-only">
+                Template {index + 1}: {template.name}
+              </span>
             </label>
           ))}
         </div>
