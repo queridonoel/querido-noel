@@ -58,6 +58,7 @@ export function LetterForm({ data, onChange }: LetterFormProps) {
           }
           id="pet-name"
           label="Nome do pet"
+          maxLength={25}
           name="petName"
           onChange={(event) => onChange({ petName: event.target.value })}
           placeholder="Ex.: Mel, Thor, Nina"
