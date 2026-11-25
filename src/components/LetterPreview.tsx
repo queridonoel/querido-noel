@@ -4,6 +4,8 @@ import {
   type KeyboardEvent,
   type PointerEvent,
 } from 'react'
+import { toPng } from 'html-to-image'
+import { Download } from 'lucide-react'
 import { getLetterTemplate } from '../config/templates'
 import type { LetterData } from '../types/letter'
 import { SectionTitle } from './SectionTitle'
@@ -116,6 +118,48 @@ interface LetterPreviewProps {
 
 export function LetterPreview({ data }: LetterPreviewProps) {
   const template = getLetterTemplate(data.template)
+  const previewRef = useRef<HTMLDivElement>(null)
+  const [isDownloading, setIsDownloading] = useState(false)
+  const [downloadError, setDownloadError] = useState('')
+  const canDownload = Boolean(
+    data.petName.trim() &&
+      data.photoUrl &&
+      data.message.trim() &&
+      data.institution.trim() &&
+      data.contact.trim(),
+  )
+
+  async function handleDownload() {
+    const preview = previewRef.current
+    if (!preview || !canDownload) return
+
+    setIsDownloading(true)
+    setDownloadError('')
+
+    try {
+      await document.fonts.ready
+      const pixelRatio = 1254 / preview.getBoundingClientRect().width
+      const dataUrl = await toPng(preview, {
+        pixelRatio,
+      })
+      const safePetName =
+        data.petName
+          .trim()
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .replace(/[^a-zA-Z0-9]+/g, '-')
+          .replace(/^-|-$/g, '')
+          .toLowerCase() || 'pet'
+      const link = document.createElement('a')
+      link.download = `cartinha-${safePetName}.png`
+      link.href = dataUrl
+      link.click()
+    } catch {
+      setDownloadError('Não foi possível gerar a imagem. Tente novamente.')
+    } finally {
+      setIsDownloading(false)
+    }
+  }
 
   return (
     <section
@@ -123,7 +167,11 @@ export function LetterPreview({ data }: LetterPreviewProps) {
       className="mx-auto flex w-full max-w-[540px] flex-col items-stretch gap-4 lg:sticky lg:top-6"
     >
       <SectionTitle>Pré-visualização da sua cartinha</SectionTitle>
-      <div className="relative mt-1 aspect-square w-full overflow-hidden rounded-xl shadow-sm">
+      <div className="mt-1 overflow-hidden rounded-xl shadow-sm">
+        <div
+          className="relative aspect-square w-full overflow-hidden"
+          ref={previewRef}
+        >
         <img
           alt=""
           aria-hidden="true"
@@ -145,7 +193,7 @@ export function LetterPreview({ data }: LetterPreviewProps) {
         </p>
         <p
           aria-live="polite"
-          className="absolute top-[42%] left-[45%] flex h-[22.3%] w-[49.4%] items-center justify-center overflow-hidden px-[3%] py-[2%] text-center text-[clamp(0.55rem,2.2vw,0.85rem)] leading-snug font-medium break-words whitespace-pre-wrap text-text"
+          className="absolute top-[42%] left-[45%] flex h-[22.3%] w-[49.4%] items-center justify-center overflow-hidden px-[3%] py-[2%] text-center text-[clamp(0.55rem,2.2vw,0.85rem)] leading-snug font-medium break-words whitespace-pre-wrap text-text [overflow-wrap:anywhere]"
         >
           {data.message}
         </p>
@@ -163,8 +211,23 @@ export function LetterPreview({ data }: LetterPreviewProps) {
           <p className="w-full truncate text-[clamp(0.5rem,1.9vw,0.75rem)] font-medium">
             {data.contact}
           </p>
+          </div>
         </div>
       </div>
+      <button
+        className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-primary px-4 text-sm font-bold text-white transition hover:bg-primary/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-45"
+        disabled={!canDownload || isDownloading}
+        onClick={handleDownload}
+        type="button"
+      >
+        <Download aria-hidden="true" className="size-4" />
+        {isDownloading ? 'Gerando imagem...' : 'Baixar cartinha'}
+      </button>
+      {downloadError && (
+        <p className="text-center text-xs text-christmas-red" role="alert">
+          {downloadError}
+        </p>
+      )}
     </section>
   )
 }

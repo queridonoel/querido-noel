@@ -73,6 +73,18 @@ export function LetterForm({ data, onChange }: LetterFormProps) {
         onChange={handleFileChange}
       />
 
+      <TextareaField
+        count={data.message.length}
+        id="request"
+        label="O que o pet quer de Natal?"
+        maxLength={150}
+        name="request"
+        onChange={(event) => onChange({ message: event.target.value })}
+        placeholder="Conte o que o pet precisa, seu desejo de Natal ou como ele pode fazer parte de uma nova família..."
+        required
+        value={data.message}
+      />
+
       <div className="grid gap-4 sm:grid-cols-2">
         <InputField
           icon={<House aria-hidden="true" className="size-4" />}
@@ -102,18 +114,6 @@ export function LetterForm({ data, onChange }: LetterFormProps) {
           value={data.contact}
         />
       </div>
-
-      <TextareaField
-        count={data.message.length}
-        id="request"
-        label="O que eu quero de Natal?"
-        maxLength={300}
-        name="request"
-        onChange={(event) => onChange({ message: event.target.value })}
-        placeholder="Conte o que o pet precisa, seu desejo de Natal ou como ele pode fazer parte de uma nova família..."
-        required
-        value={data.message}
-      />
 
       <section aria-labelledby="template-heading">
         <div aria-hidden="true" className="mb-4 border-t border-border" />
