@@ -1,6 +1,114 @@
+import {
+  useRef,
+  useState,
+  type KeyboardEvent,
+  type PointerEvent,
+} from 'react'
 import { getLetterTemplate } from '../config/templates'
 import type { LetterData } from '../types/letter'
 import { SectionTitle } from './SectionTitle'
+
+interface PhotoPosition {
+  x: number
+  y: number
+}
+
+interface DragStart extends PhotoPosition {
+  clientX: number
+  clientY: number
+  pointerId: number
+}
+
+interface DraggablePhotoProps {
+  alt: string
+  src: string
+}
+
+function clampPosition(value: number) {
+  return Math.min(100, Math.max(0, value))
+}
+
+function DraggablePhoto({ alt, src }: DraggablePhotoProps) {
+  const [position, setPosition] = useState<PhotoPosition>({ x: 50, y: 50 })
+  const [isDragging, setIsDragging] = useState(false)
+  const dragStart = useRef<DragStart | null>(null)
+
+  function handlePointerDown(event: PointerEvent<HTMLButtonElement>) {
+    event.currentTarget.setPointerCapture(event.pointerId)
+    dragStart.current = {
+      clientX: event.clientX,
+      clientY: event.clientY,
+      pointerId: event.pointerId,
+      ...position,
+    }
+    setIsDragging(true)
+  }
+
+  function handlePointerMove(event: PointerEvent<HTMLButtonElement>) {
+    const start = dragStart.current
+    if (!start || start.pointerId !== event.pointerId) return
+
+    const bounds = event.currentTarget.getBoundingClientRect()
+    const deltaX = ((event.clientX - start.clientX) / bounds.width) * 100
+    const deltaY = ((event.clientY - start.clientY) / bounds.height) * 100
+
+    setPosition({
+      x: clampPosition(start.x - deltaX),
+      y: clampPosition(start.y - deltaY),
+    })
+  }
+
+  function stopDragging(event: PointerEvent<HTMLButtonElement>) {
+    if (dragStart.current?.pointerId !== event.pointerId) return
+    dragStart.current = null
+    setIsDragging(false)
+  }
+
+  function handleKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
+    const step = event.shiftKey ? 10 : 3
+    const movement = {
+      ArrowDown: { x: 0, y: step },
+      ArrowLeft: { x: -step, y: 0 },
+      ArrowRight: { x: step, y: 0 },
+      ArrowUp: { x: 0, y: -step },
+    }[event.key]
+
+    if (event.key === 'Home') {
+      event.preventDefault()
+      setPosition({ x: 50, y: 50 })
+      return
+    }
+
+    if (!movement) return
+    event.preventDefault()
+    setPosition((current) => ({
+      x: clampPosition(current.x + movement.x),
+      y: clampPosition(current.y + movement.y),
+    }))
+  }
+
+  return (
+    <button
+      aria-label={`${alt}. Arraste para reposicionar ou use as setas do teclado.`}
+      className={`absolute top-[17.4%] left-[6.9%] h-[30.3%] w-[34.5%] touch-none overflow-hidden rounded-[0.5%] border-0 bg-transparent p-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+      onKeyDown={handleKeyDown}
+      onPointerCancel={stopDragging}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={stopDragging}
+      type="button"
+    >
+      <img
+        alt=""
+        aria-hidden="true"
+        className="size-full select-none object-cover"
+        draggable="false"
+        src={src}
+        style={{ objectPosition: `${position.x}% ${position.y}%` }}
+      />
+    </button>
+  )
+}
 
 interface LetterPreviewProps {
   data: LetterData
@@ -23,10 +131,9 @@ export function LetterPreview({ data }: LetterPreviewProps) {
           src={template.post}
         />
         {data.photoUrl && (
-          <img
+          <DraggablePhoto
             alt={`Foto de ${data.petName || 'pet'}`}
-            className="absolute top-[17.4%] left-[6.9%] h-[30.3%] w-[34.5%] rounded-[0.5%] object-cover object-center"
-            draggable="false"
+            key={data.photoUrl}
             src={data.photoUrl}
           />
         )}
