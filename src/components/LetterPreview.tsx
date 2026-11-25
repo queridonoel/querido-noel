@@ -5,7 +5,7 @@ import {
   type PointerEvent,
 } from 'react'
 import { toPng } from 'html-to-image'
-import { Download } from 'lucide-react'
+import { Camera, Download } from 'lucide-react'
 import { getLetterTemplate } from '../config/templates'
 import type { LetterData } from '../types/letter'
 import { SectionTitle } from './SectionTitle'
@@ -178,12 +178,19 @@ export function LetterPreview({ data }: LetterPreviewProps) {
           className="absolute inset-0 size-full scale-[1.01] object-cover"
           src={template.post}
         />
-        {data.photoUrl && (
+        {data.photoUrl ? (
           <DraggablePhoto
             alt={`Foto de ${data.petName || 'pet'}`}
             key={data.photoUrl}
             src={data.photoUrl}
           />
+        ) : (
+          <div
+            aria-hidden="true"
+            className="absolute top-[17.4%] left-[6.9%] flex h-[30.3%] w-[34.5%] items-center justify-center text-text/25"
+          >
+            <Camera className="size-[24%]" strokeWidth={1.5} />
+          </div>
         )}
         <p
           aria-live="polite"

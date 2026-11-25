@@ -28,14 +28,17 @@ export function FieldLabel({ children, htmlFor, required }: FieldLabelProps) {
 }
 
 interface InputFieldProps extends InputHTMLAttributes<HTMLInputElement> {
+  count?: number
   icon?: ReactNode
   label: string
 }
 
 export function InputField({
+  count,
   icon,
   id,
   label,
+  maxLength,
   required,
   ...props
 }: InputFieldProps) {
@@ -51,11 +54,17 @@ export function InputField({
           </span>
         )}
         <input
-          className={`${controlClassName} ${icon ? 'pl-10' : ''}`}
+          className={`${controlClassName} ${icon ? 'pl-10' : ''} ${count !== undefined ? 'pr-14' : ''}`}
           id={id}
+          maxLength={maxLength}
           required={required}
           {...props}
         />
+        {count !== undefined && maxLength !== undefined && (
+          <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-xs text-primary">
+            {count}/{maxLength}
+          </span>
+        )}
       </div>
     </div>
   )

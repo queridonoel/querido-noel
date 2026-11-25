@@ -49,6 +49,7 @@ export function LetterForm({ data, onChange }: LetterFormProps) {
 
       <div>
         <InputField
+          count={data.petName.length}
           icon={
             <PawPrint
               aria-hidden="true"
