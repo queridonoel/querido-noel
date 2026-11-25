@@ -1,14 +1,9 @@
 import { useState, type ChangeEvent } from 'react'
 import { House, PawPrint, Phone } from 'lucide-react'
 import { letterTemplates } from '../../config/templates'
-import type { LetterData, PetType, TemplateId } from '../../types/letter'
+import type { LetterData, TemplateId } from '../../types/letter'
 import { SectionTitle } from '../SectionTitle'
-import {
-  InputField,
-  SelectField,
-  TextareaField,
-  UploadField,
-} from './FormControls'
+import { InputField, TextareaField, UploadField } from './FormControls'
 
 function formatPhone(value: string) {
   const digits = value.replace(/\D/g, '').slice(0, 11)
@@ -52,7 +47,7 @@ export function LetterForm({ data, onChange }: LetterFormProps) {
     <form className="space-y-5" noValidate>
       <SectionTitle>Informações da cartinha</SectionTitle>
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div>
         <InputField
           icon={
             <PawPrint
@@ -70,29 +65,6 @@ export function LetterForm({ data, onChange }: LetterFormProps) {
           type="text"
           value={data.petName}
         />
-        <SelectField
-          icon={
-            <PawPrint
-              aria-hidden="true"
-              className="size-4"
-              fill="currentColor"
-            />
-          }
-          id="pet-type"
-          label="Tipo de pet"
-          name="petType"
-          onChange={(event) =>
-            onChange({ petType: event.target.value as PetType })
-          }
-          required
-          value={data.petType}
-        >
-          <option disabled value="">
-            Selecione...
-          </option>
-          <option value="dog">Cachorro</option>
-          <option value="cat">Gato</option>
-        </SelectField>
       </div>
 
       <UploadField

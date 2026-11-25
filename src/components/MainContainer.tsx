@@ -11,7 +11,6 @@ const initialLetter: LetterData = {
   institution: '',
   message: '',
   petName: '',
-  petType: '',
   photoUrl: '',
   template: 'classic',
 }

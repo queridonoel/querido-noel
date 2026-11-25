@@ -1,6 +1,5 @@
 import { getLetterTemplate } from '../config/templates'
 import type { LetterData } from '../types/letter'
-import { Polaroid } from './Polaroid'
 import { SectionTitle } from './SectionTitle'
 
 interface LetterPreviewProps {
@@ -9,12 +8,6 @@ interface LetterPreviewProps {
 
 export function LetterPreview({ data }: LetterPreviewProps) {
   const template = getLetterTemplate(data.template)
-  const petName = data.petName.trim() || 'Mel'
-  const message =
-    data.message.trim() ||
-    'Neste Natal, meu maior desejo é encontrar uma família cheia de amor e carinho para chamar de minha.'
-  const institution = data.institution.trim() || 'Canil Amigo'
-  const contact = data.contact.trim() || '(11) 99999-9999'
 
   return (
     <section
@@ -29,37 +22,40 @@ export function LetterPreview({ data }: LetterPreviewProps) {
           className="absolute inset-0 size-full scale-[1.01] object-cover"
           src={template.post}
         />
-
-        <div className="absolute inset-[10%] grid grid-cols-[52%_1fr] items-center gap-[4%] text-primary">
+        {data.photoUrl && (
+          <img
+            alt={`Foto de ${data.petName || 'pet'}`}
+            className="absolute top-[17.4%] left-[6.9%] h-[30.3%] w-[34.5%] rounded-[0.5%] object-cover object-center"
+            draggable="false"
+            src={data.photoUrl}
+          />
+        )}
+        <p
+          aria-live="polite"
+          className="absolute top-[27%] left-[45%] flex h-[7.8%] w-[38.6%] items-center justify-center truncate px-[2%] font-heading text-[clamp(0.65rem,2.7vw,0.95rem)] font-medium text-text"
+        >
+          {data.petName}
+        </p>
+        <p
+          aria-live="polite"
+          className="absolute top-[42%] left-[45%] flex h-[22.3%] w-[49.4%] items-center justify-center overflow-hidden px-[3%] py-[2%] text-center text-[clamp(0.55rem,2.2vw,0.85rem)] leading-snug font-medium break-words whitespace-pre-wrap text-text"
+        >
+          {data.message}
+        </p>
+        <div
+          aria-live="polite"
+          className="absolute top-[78.8%] left-[27.4%] flex h-[12.8%] w-[45.3%] flex-col items-center justify-center px-[3%] text-center text-text"
+        >
+          <p className="w-full truncate font-heading text-[clamp(0.55rem,2.2vw,0.85rem)] font-semibold">
+            {data.institution}
+          </p>
           <div
-            className="relative aspect-square w-[110%]"
-            style={{
-              transform: 'translate(-5%, -30%)',
-            }}
-          >
-            <Polaroid
-              accentColor={template.accent}
-              className="absolute top-[4%] left-[8%] w-[84%] rounded-[2.5%]"
-              photoAlt={`Foto de ${petName}`}
-              photoUrl={data.photoUrl}
-            />
-          </div>
-
-          <div className="flex min-w-0 flex-col text-left">
-            <p className="font-heading text-[clamp(0.72rem,2vw,1.15rem)] font-semibold">
-              Querido Noel,
-            </p>
-            <p className="mt-0.5 text-[clamp(0.58rem,1.5vw,0.82rem)] font-bold">
-              Eu sou {petName}!
-            </p>
-            <p className="mt-2 line-clamp-5 text-[clamp(0.52rem,1.3vw,0.74rem)] leading-snug">
-              {message}
-            </p>
-            <div className="mt-3 text-[clamp(0.5rem,1.2vw,0.7rem)] leading-tight">
-              <p className="font-bold">{institution}</p>
-              <p>{contact}</p>
-            </div>
-          </div>
+            aria-hidden="true"
+            className="my-[2.5%] w-[82%] border-t border-text/15"
+          />
+          <p className="w-full truncate text-[clamp(0.5rem,1.9vw,0.75rem)] font-medium">
+            {data.contact}
+          </p>
         </div>
       </div>
     </section>

@@ -171,7 +171,7 @@ export function TextareaField({
       </FieldLabel>
       <div className="relative">
         <textarea
-          className="min-h-24 w-full resize-y rounded-xl border border-border bg-surface px-4 py-3 pb-7 text-sm leading-relaxed text-primary outline-none transition placeholder:text-text-muted focus:border-primary focus:ring-2 focus:ring-primary/15"
+          className="h-24 w-full resize-none rounded-xl border border-border bg-surface px-4 py-3 pb-7 text-sm leading-relaxed text-primary outline-none transition placeholder:text-text-muted focus:border-primary focus:ring-2 focus:ring-primary/15"
           id={id}
           maxLength={maxLength}
           required={required}
