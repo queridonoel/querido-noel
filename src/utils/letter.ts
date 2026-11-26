@@ -14,6 +14,11 @@ export function formatPhone(value: string) {
   return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`
 }
 
+export function isValidPhone(value: string) {
+  const digitCount = value.replace(/\D/g, '').length
+  return digitCount === 10 || digitCount === 11
+}
+
 export function toSafeFileName(value: string, fallback = 'pet') {
   return (
     value

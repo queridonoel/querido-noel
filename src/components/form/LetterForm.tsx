@@ -83,6 +83,7 @@ export function LetterForm({ data, onChange }: LetterFormProps) {
           icon={<House aria-hidden="true" className="size-4" />}
           id="institution"
           label="Nome da ONG ou canil"
+          maxLength={28}
           name="institution"
           onChange={(event) => onChange({ institution: event.target.value })}
           placeholder="Ex.: Canil Amigo"
@@ -97,6 +98,7 @@ export function LetterForm({ data, onChange }: LetterFormProps) {
           id="contact"
           inputMode="tel"
           label="Contato"
+          maxLength={15}
           name="contact"
           onChange={(event) =>
             onChange({ contact: formatPhone(event.target.value) })

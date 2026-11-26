@@ -3,7 +3,11 @@ import { toPng } from 'html-to-image'
 import { Camera, Download } from 'lucide-react'
 import { getLetterTemplate } from '../config/templates'
 import type { LetterData } from '../types/letter'
-import { clampPhotoPosition, toSafeFileName } from '../utils/letter'
+import {
+  clampPhotoPosition,
+  isValidPhone,
+  toSafeFileName,
+} from '../utils/letter'
 import { SectionTitle } from './SectionTitle'
 
 interface PhotoPosition {
@@ -118,7 +122,7 @@ export function LetterPreview({ data }: LetterPreviewProps) {
     data.photoUrl &&
     data.message.trim() &&
     data.institution.trim() &&
-    data.contact.trim(),
+    isValidPhone(data.contact),
   )
 
   async function handleDownload() {
