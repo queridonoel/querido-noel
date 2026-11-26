@@ -183,7 +183,7 @@ export function LetterPreview({ data }: LetterPreviewProps) {
           </p>
           <p
             aria-live="polite"
-            className="absolute top-[42%] left-[45%] flex h-[22.3%] w-[49.4%] items-center justify-center overflow-hidden px-[3%] py-[2%] text-center text-[clamp(0.55rem,2.2vw,0.85rem)] leading-snug font-medium break-words whitespace-pre-wrap text-text [overflow-wrap:anywhere]"
+            className="absolute top-[42%] left-[45%] flex h-[22.3%] w-[49.4%] items-center justify-center overflow-hidden px-[3%] py-[2%] text-center font-heading text-[clamp(0.6rem,2.4vw,0.9rem)] leading-snug font-medium break-words whitespace-pre-wrap text-text [overflow-wrap:anywhere]"
           >
             {data.message}
           </p>
