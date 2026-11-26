@@ -3,6 +3,7 @@ import { toPng } from 'html-to-image'
 import { Camera, Download } from 'lucide-react'
 import { getLetterTemplate } from '../config/templates'
 import type { LetterData } from '../types/letter'
+import { clampPhotoPosition, toSafeFileName } from '../utils/letter'
 import { SectionTitle } from './SectionTitle'
 
 interface PhotoPosition {
@@ -19,10 +20,6 @@ interface DragStart extends PhotoPosition {
 interface DraggablePhotoProps {
   alt: string
   src: string
-}
-
-function clampPosition(value: number) {
-  return Math.min(100, Math.max(0, value))
 }
 
 function DraggablePhoto({ alt, src }: DraggablePhotoProps) {
@@ -50,8 +47,8 @@ function DraggablePhoto({ alt, src }: DraggablePhotoProps) {
     const deltaY = ((event.clientY - start.clientY) / bounds.height) * 100
 
     setPosition({
-      x: clampPosition(start.x - deltaX),
-      y: clampPosition(start.y - deltaY),
+      x: clampPhotoPosition(start.x - deltaX),
+      y: clampPhotoPosition(start.y - deltaY),
     })
   }
 
@@ -79,8 +76,8 @@ function DraggablePhoto({ alt, src }: DraggablePhotoProps) {
     if (!movement) return
     event.preventDefault()
     setPosition((current) => ({
-      x: clampPosition(current.x + movement.x),
-      y: clampPosition(current.y + movement.y),
+      x: clampPhotoPosition(current.x + movement.x),
+      y: clampPhotoPosition(current.y + movement.y),
     }))
   }
 
@@ -137,14 +134,7 @@ export function LetterPreview({ data }: LetterPreviewProps) {
       const dataUrl = await toPng(preview, {
         pixelRatio,
       })
-      const safePetName =
-        data.petName
-          .trim()
-          .normalize('NFD')
-          .replace(/[\u0300-\u036f]/g, '')
-          .replace(/[^a-zA-Z0-9]+/g, '-')
-          .replace(/^-|-$/g, '')
-          .toLowerCase() || 'pet'
+      const safePetName = toSafeFileName(data.petName)
       const link = document.createElement('a')
       link.download = `cartinha-${safePetName}.png`
       link.href = dataUrl
