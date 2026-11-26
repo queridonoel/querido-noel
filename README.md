@@ -74,9 +74,9 @@ Para aplicar a formatação automaticamente:
 npm run format
 ```
 
-## ☁️ Deploy no Cloudflare Pages
+## ☁️ Deploy no GitHub Pages
 
-O projeto foi hospedado no Cloudflare Pages.
+O projeto foi hospedado no GitHub Pages.
 
 ---
 
