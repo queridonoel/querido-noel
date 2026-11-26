@@ -4,8 +4,8 @@ import { Camera, Download } from 'lucide-react'
 import { getLetterTemplate } from '../config/templates'
 import type { LetterData } from '../types/letter'
 import {
+  canDownloadLetter,
   clampPhotoPosition,
-  isValidPhone,
   toSafeFileName,
 } from '../utils/letter'
 import { SectionTitle } from './SectionTitle'
@@ -117,13 +117,7 @@ export function LetterPreview({ data }: LetterPreviewProps) {
   const previewRef = useRef<HTMLDivElement>(null)
   const [isDownloading, setIsDownloading] = useState(false)
   const [downloadError, setDownloadError] = useState('')
-  const canDownload = Boolean(
-    data.petName.trim() &&
-    data.photoUrl &&
-    data.message.trim() &&
-    data.institution.trim() &&
-    isValidPhone(data.contact),
-  )
+  const canDownload = canDownloadLetter(data)
 
   async function handleDownload() {
     const preview = previewRef.current

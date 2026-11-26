@@ -2,7 +2,7 @@ import { useState, type ChangeEvent } from 'react'
 import { House, PawPrint, Phone } from 'lucide-react'
 import { letterTemplates } from '../../config/templates'
 import type { LetterData } from '../../types/letter'
-import { formatPhone } from '../../utils/letter'
+import { formatPhone, validatePhotoFile } from '../../utils/letter'
 import { SectionTitle } from '../SectionTitle'
 import { InputField, TextareaField, UploadField } from './FormControls'
 
@@ -20,13 +20,9 @@ export function LetterForm({ data, onChange }: LetterFormProps) {
     setFileError('')
     setFileName('')
     if (!file) return
-    if (!['image/jpeg', 'image/png'].includes(file.type)) {
-      setFileError('Selecione uma imagem JPG ou PNG.')
-      event.target.value = ''
-      return
-    }
-    if (file.size > 5 * 1024 * 1024) {
-      setFileError('A imagem deve ter no máximo 5 MB.')
+    const validationError = validatePhotoFile(file)
+    if (validationError) {
+      setFileError(validationError)
       event.target.value = ''
       return
     }

@@ -1,3 +1,23 @@
+import type { LetterData } from '../types/letter'
+
+const MAX_PHOTO_SIZE = 5 * 1024 * 1024
+const SUPPORTED_PHOTO_TYPES = ['image/jpeg', 'image/png']
+
+interface PhotoFileData {
+  size: number
+  type: string
+}
+
+export function canDownloadLetter(data: LetterData) {
+  return Boolean(
+    data.petName.trim() &&
+    data.photoUrl.trim() &&
+    data.message.trim() &&
+    data.institution.trim() &&
+    isValidPhone(data.contact),
+  )
+}
+
 export function clampPhotoPosition(value: number) {
   return Math.min(100, Math.max(0, value))
 }
@@ -15,8 +35,7 @@ export function formatPhone(value: string) {
 }
 
 export function isValidPhone(value: string) {
-  const digitCount = value.replace(/\D/g, '').length
-  return digitCount === 10 || digitCount === 11
+  return /^\(\d{2}\) (?:\d{4}|\d{5})-\d{4}$/.test(value)
 }
 
 export function toSafeFileName(value: string, fallback = 'pet') {
@@ -29,4 +48,16 @@ export function toSafeFileName(value: string, fallback = 'pet') {
       .replace(/^-|-$/g, '')
       .toLowerCase() || fallback
   )
+}
+
+export function validatePhotoFile(file: PhotoFileData) {
+  if (!SUPPORTED_PHOTO_TYPES.includes(file.type)) {
+    return 'Selecione uma imagem JPG ou PNG.'
+  }
+
+  if (file.size > MAX_PHOTO_SIZE) {
+    return 'A imagem deve ter no máximo 5 MB.'
+  }
+
+  return null
 }

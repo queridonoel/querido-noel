@@ -9,5 +9,6 @@ Projeto front-end criado com React, TypeScript, Vite e Tailwind CSS.
 - `npm run lint`: executa o ESLint.
 - `npm run format`: formata os arquivos com Prettier.
 - `npm run format:check`: verifica a formatação.
+- `npm test`: executa os testes automatizados.
 
 O deploy para o GitHub Pages é executado automaticamente pela GitHub Action após um push para a branch `main`.
