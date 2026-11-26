@@ -7,6 +7,7 @@ import {
   isValidPhone,
   toSafeFileName,
   validatePhotoFile,
+  validatePhotoImage,
 } from '../src/utils/letter.ts'
 
 const completeLetter = {
@@ -60,6 +61,44 @@ describe('validatePhotoFile', () => {
     assert.equal(
       validatePhotoFile({ type: 'image/png', size: 5 * 1024 * 1024 + 1 }),
       'A imagem deve ter no máximo 5 MB.',
+    )
+  })
+})
+
+describe('validatePhotoImage', () => {
+  const validFile = new File(['image'], 'pet.png', { type: 'image/png' })
+
+  it('aceita uma imagem decodificável dentro do limite de dimensões', async () => {
+    let wasClosed = false
+    const decode = async () => ({
+      width: 4032,
+      height: 3024,
+      close: () => {
+        wasClosed = true
+      },
+    })
+
+    assert.equal(await validatePhotoImage(validFile, decode), null)
+    assert.equal(wasClosed, true)
+  })
+
+  it('rejeita imagens com dimensões excessivas', async () => {
+    const decode = async () => ({ width: 5000, height: 3000 })
+
+    assert.equal(
+      await validatePhotoImage(validFile, decode),
+      'A imagem deve ter no máximo 4096 × 4096 pixels.',
+    )
+  })
+
+  it('rejeita arquivos que não podem ser decodificados como imagem', async () => {
+    const decode = async () => {
+      throw new Error('Invalid image')
+    }
+
+    assert.equal(
+      await validatePhotoImage(validFile, decode),
+      'Não foi possível ler a imagem. Selecione outro arquivo.',
     )
   })
 })

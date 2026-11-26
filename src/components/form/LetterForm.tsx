@@ -2,7 +2,7 @@ import { useState, type ChangeEvent } from 'react'
 import { House, PawPrint, Phone } from 'lucide-react'
 import { letterTemplates } from '../../config/templates'
 import type { LetterData } from '../../types/letter'
-import { formatPhone, validatePhotoFile } from '../../utils/letter'
+import { formatPhone, validatePhotoImage } from '../../utils/letter'
 import { SectionTitle } from '../SectionTitle'
 import { InputField, TextareaField, UploadField } from './FormControls'
 
@@ -15,12 +15,12 @@ export function LetterForm({ data, onChange }: LetterFormProps) {
   const [fileName, setFileName] = useState('')
   const [fileError, setFileError] = useState('')
 
-  function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
+  async function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0]
     setFileError('')
     setFileName('')
     if (!file) return
-    const validationError = validatePhotoFile(file)
+    const validationError = await validatePhotoImage(file)
     if (validationError) {
       setFileError(validationError)
       event.target.value = ''

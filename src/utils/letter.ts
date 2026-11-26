@@ -1,12 +1,21 @@
 import type { LetterData } from '../types/letter'
 
 const MAX_PHOTO_SIZE = 5 * 1024 * 1024
+const MAX_PHOTO_DIMENSION = 4096
 const SUPPORTED_PHOTO_TYPES = ['image/jpeg', 'image/png']
 
 interface PhotoFileData {
   size: number
   type: string
 }
+
+interface DecodedImage {
+  close?: () => void
+  height: number
+  width: number
+}
+
+type ImageDecoder = (file: Blob) => Promise<DecodedImage>
 
 export function canDownloadLetter(data: LetterData) {
   return Boolean(
@@ -57,6 +66,36 @@ export function validatePhotoFile(file: PhotoFileData) {
 
   if (file.size > MAX_PHOTO_SIZE) {
     return 'A imagem deve ter no máximo 5 MB.'
+  }
+
+  return null
+}
+
+export async function validatePhotoImage(
+  file: File,
+  decode: ImageDecoder = createImageBitmap,
+) {
+  const fileError = validatePhotoFile(file)
+  if (fileError) return fileError
+
+  let image: DecodedImage
+
+  try {
+    image = await decode(file)
+  } catch {
+    return 'Não foi possível ler a imagem. Selecione outro arquivo.'
+  }
+
+  const hasInvalidDimensions =
+    image.width < 1 ||
+    image.height < 1 ||
+    image.width > MAX_PHOTO_DIMENSION ||
+    image.height > MAX_PHOTO_DIMENSION
+
+  image.close?.()
+
+  if (hasInvalidDimensions) {
+    return `A imagem deve ter no máximo ${MAX_PHOTO_DIMENSION} × ${MAX_PHOTO_DIMENSION} pixels.`
   }
 
   return null
