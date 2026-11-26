@@ -31,7 +31,7 @@ export function MainContainer() {
   }
 
   return (
-    <div className="relative isolate mx-auto mt-28 w-[calc(100%-2rem)] max-w-[1200px] sm:mt-42 sm:w-[calc(100%-3rem)] lg:w-[calc(100%-4rem)]">
+    <div className="relative isolate mx-auto mt-28 mb-8 w-[calc(100%-2rem)] max-w-[1200px] sm:mt-42 sm:mb-0 sm:w-[calc(100%-3rem)] lg:w-[calc(100%-4rem)]">
       <img
         aria-hidden="true"
         alt=""
