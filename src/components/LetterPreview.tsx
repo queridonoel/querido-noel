@@ -1,9 +1,4 @@
-import {
-  useRef,
-  useState,
-  type KeyboardEvent,
-  type PointerEvent,
-} from 'react'
+import { useRef, useState, type KeyboardEvent, type PointerEvent } from 'react'
 import { toPng } from 'html-to-image'
 import { Camera, Download } from 'lucide-react'
 import { getLetterTemplate } from '../config/templates'
@@ -123,10 +118,10 @@ export function LetterPreview({ data }: LetterPreviewProps) {
   const [downloadError, setDownloadError] = useState('')
   const canDownload = Boolean(
     data.petName.trim() &&
-      data.photoUrl &&
-      data.message.trim() &&
-      data.institution.trim() &&
-      data.contact.trim(),
+    data.photoUrl &&
+    data.message.trim() &&
+    data.institution.trim() &&
+    data.contact.trim(),
   )
 
   async function handleDownload() {
@@ -172,52 +167,52 @@ export function LetterPreview({ data }: LetterPreviewProps) {
           className="relative aspect-square w-full overflow-hidden"
           ref={previewRef}
         >
-        <img
-          alt=""
-          aria-hidden="true"
-          className="absolute inset-0 size-full scale-[1.01] object-cover"
-          src={template.post}
-        />
-        {data.photoUrl ? (
-          <DraggablePhoto
-            alt={`Foto de ${data.petName || 'pet'}`}
-            key={data.photoUrl}
-            src={data.photoUrl}
-          />
-        ) : (
-          <div
+          <img
+            alt=""
             aria-hidden="true"
-            className="absolute top-[17.4%] left-[6.9%] flex h-[30.3%] w-[34.5%] items-center justify-center text-text/25"
+            className="absolute inset-0 size-full scale-[1.01] object-cover"
+            src={template.post}
+          />
+          {data.photoUrl ? (
+            <DraggablePhoto
+              alt={`Foto de ${data.petName || 'pet'}`}
+              key={data.photoUrl}
+              src={data.photoUrl}
+            />
+          ) : (
+            <div
+              aria-hidden="true"
+              className="absolute top-[17.4%] left-[6.9%] flex h-[30.3%] w-[34.5%] items-center justify-center text-text/25"
+            >
+              <Camera className="size-[24%]" strokeWidth={1.5} />
+            </div>
+          )}
+          <p
+            aria-live="polite"
+            className="absolute top-[27%] left-[45%] flex h-[7.8%] w-[38.6%] items-center justify-center truncate px-[2%] font-heading text-[clamp(0.65rem,2.7vw,0.95rem)] font-medium text-text"
           >
-            <Camera className="size-[24%]" strokeWidth={1.5} />
-          </div>
-        )}
-        <p
-          aria-live="polite"
-          className="absolute top-[27%] left-[45%] flex h-[7.8%] w-[38.6%] items-center justify-center truncate px-[2%] font-heading text-[clamp(0.65rem,2.7vw,0.95rem)] font-medium text-text"
-        >
-          {data.petName}
-        </p>
-        <p
-          aria-live="polite"
-          className="absolute top-[42%] left-[45%] flex h-[22.3%] w-[49.4%] items-center justify-center overflow-hidden px-[3%] py-[2%] text-center text-[clamp(0.55rem,2.2vw,0.85rem)] leading-snug font-medium break-words whitespace-pre-wrap text-text [overflow-wrap:anywhere]"
-        >
-          {data.message}
-        </p>
-        <div
-          aria-live="polite"
-          className="absolute top-[78.8%] left-[27.4%] flex h-[12.8%] w-[45.3%] flex-col items-center justify-center px-[3%] text-center text-text"
-        >
-          <p className="w-full truncate font-heading text-[clamp(0.55rem,2.2vw,0.85rem)] font-semibold">
-            {data.institution}
+            {data.petName}
+          </p>
+          <p
+            aria-live="polite"
+            className="absolute top-[42%] left-[45%] flex h-[22.3%] w-[49.4%] items-center justify-center overflow-hidden px-[3%] py-[2%] text-center text-[clamp(0.55rem,2.2vw,0.85rem)] leading-snug font-medium break-words whitespace-pre-wrap text-text [overflow-wrap:anywhere]"
+          >
+            {data.message}
           </p>
           <div
-            aria-hidden="true"
-            className="my-[2.5%] w-[82%] border-t border-text/15"
-          />
-          <p className="w-full truncate text-[clamp(0.5rem,1.9vw,0.75rem)] font-medium">
-            {data.contact}
-          </p>
+            aria-live="polite"
+            className="absolute top-[78.8%] left-[27.4%] flex h-[12.8%] w-[45.3%] flex-col items-center justify-center px-[3%] text-center text-text"
+          >
+            <p className="w-full truncate font-heading text-[clamp(0.55rem,2.2vw,0.85rem)] font-semibold">
+              {data.institution}
+            </p>
+            <div
+              aria-hidden="true"
+              className="my-[2.5%] w-[82%] border-t border-text/15"
+            />
+            <p className="w-full truncate text-[clamp(0.5rem,1.9vw,0.75rem)] font-medium">
+              {data.contact}
+            </p>
           </div>
         </div>
       </div>

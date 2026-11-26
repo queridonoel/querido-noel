@@ -128,7 +128,8 @@ export function UploadField({ error, fileName, onChange }: UploadFieldProps) {
         htmlFor="pet-photo"
       >
         <span className="pointer-events-none absolute -top-2 right-3 max-w-[calc(100%-1.5rem)] bg-surface px-2 text-right text-[11px] leading-tight text-text-muted">
-          Depois de enviar, arraste a foto na carta para ajustar o enquadramento.
+          Depois de enviar, arraste a foto na carta para ajustar o
+          enquadramento.
         </span>
         <span className="flex min-w-0 items-center gap-3">
           <Image
