@@ -27,9 +27,10 @@ export function FieldLabel({ children, htmlFor, required }: FieldLabelProps) {
   )
 }
 
-interface InputFieldProps extends InputHTMLAttributes<HTMLInputElement> {
+type InputFieldProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'id'> & {
   count?: number
   icon?: ReactNode
+  id: string
   label: string
 }
 
@@ -44,7 +45,7 @@ export function InputField({
 }: InputFieldProps) {
   return (
     <div>
-      <FieldLabel htmlFor={id!} required={required}>
+      <FieldLabel htmlFor={id} required={required}>
         {label}
       </FieldLabel>
       <div className="relative">
@@ -70,8 +71,9 @@ export function InputField({
   )
 }
 
-interface SelectFieldProps extends SelectHTMLAttributes<HTMLSelectElement> {
+type SelectFieldProps = Omit<SelectHTMLAttributes<HTMLSelectElement>, 'id'> & {
   icon?: ReactNode
+  id: string
   label: string
 }
 
@@ -85,7 +87,7 @@ export function SelectField({
 }: SelectFieldProps) {
   return (
     <div>
-      <FieldLabel htmlFor={id!} required={required}>
+      <FieldLabel htmlFor={id} required={required}>
         {label}
       </FieldLabel>
       <div className="relative">
@@ -164,8 +166,12 @@ export function UploadField({ error, fileName, onChange }: UploadFieldProps) {
   )
 }
 
-interface TextareaFieldProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+type TextareaFieldProps = Omit<
+  TextareaHTMLAttributes<HTMLTextAreaElement>,
+  'id'
+> & {
   count: number
+  id: string
   label: string
 }
 
@@ -179,7 +185,7 @@ export function TextareaField({
 }: TextareaFieldProps) {
   return (
     <div>
-      <FieldLabel htmlFor={id!} required={required}>
+      <FieldLabel htmlFor={id} required={required}>
         {label}
       </FieldLabel>
       <div className="relative">

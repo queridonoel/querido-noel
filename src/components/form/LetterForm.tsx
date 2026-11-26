@@ -1,7 +1,7 @@
 import { useState, type ChangeEvent } from 'react'
 import { House, PawPrint, Phone } from 'lucide-react'
 import { letterTemplates } from '../../config/templates'
-import type { LetterData, TemplateId } from '../../types/letter'
+import type { LetterData } from '../../types/letter'
 import { formatPhone } from '../../utils/letter'
 import { SectionTitle } from '../SectionTitle'
 import { InputField, TextareaField, UploadField } from './FormControls'
@@ -127,9 +127,7 @@ export function LetterForm({ data, onChange }: LetterFormProps) {
                 checked={data.template === template.id}
                 className="peer sr-only"
                 name="template"
-                onChange={() =>
-                  onChange({ template: template.id as TemplateId })
-                }
+                onChange={() => onChange({ template: template.id })}
                 type="radio"
                 value={index}
               />
