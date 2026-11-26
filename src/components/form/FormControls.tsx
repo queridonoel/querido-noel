@@ -132,7 +132,7 @@ export function UploadField({ error, fileName, onChange }: UploadFieldProps) {
         className="relative flex min-h-16 cursor-pointer items-center justify-between gap-4 rounded-xl border border-dashed border-christmas-red/55 bg-christmas-red/[0.035] px-4 py-3 text-primary transition hover:border-christmas-red hover:bg-christmas-red/[0.06] focus-within:ring-2 focus-within:ring-primary/15"
         htmlFor="pet-photo"
       >
-        <span className="pointer-events-none absolute -top-2 right-3 max-w-[calc(100%-1.5rem)] bg-surface px-2 text-right text-[11px] leading-tight text-text-muted">
+        <span className="pointer-events-none absolute -top-2 right-3 hidden max-w-[calc(100%-1.5rem)] bg-surface px-2 text-right text-[11px] leading-tight text-text-muted sm:block">
           Depois de enviar, arraste a foto na carta para ajustar o
           enquadramento.
         </span>
@@ -166,6 +166,9 @@ export function UploadField({ error, fileName, onChange }: UploadFieldProps) {
           type="file"
         />
       </label>
+      <p className="mt-1 text-xs leading-tight text-text-muted sm:hidden">
+        Depois de enviar, arraste a foto na carta para ajustar o enquadramento.
+      </p>
       <span className="sr-only" id={helpId}>
         Selecione uma imagem JPG ou PNG de até 5 MB.
       </span>

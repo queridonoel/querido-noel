@@ -52,7 +52,7 @@ export function MainContainer() {
           className="h-auto w-full max-w-[430px] select-none"
           src={titleArt}
         />
-        <p className="mt-2 text-xs leading-tight font-semibold text-[#9a623f] sm:mt-3 sm:text-[15px]">
+        <p className="mt-2 hidden text-xs leading-tight font-semibold text-[#9a623f] sm:mt-3 sm:block sm:text-[15px]">
           Que a magia do Natal também encontre quem tem patinhas.
         </p>
       </header>
@@ -70,6 +70,9 @@ export function MainContainer() {
             />
           ))}
         </div>
+        <p className="text-center text-xs leading-tight font-semibold text-[#9a623f] sm:hidden">
+          Que a magia do Natal também encontre quem tem patinhas.
+        </p>
         <LetterForm data={letter} onChange={updateLetter} />
         <div aria-hidden="true" className="hidden bg-border lg:block" />
         <LetterPreview data={letter} />
