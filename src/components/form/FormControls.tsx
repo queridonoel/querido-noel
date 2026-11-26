@@ -120,6 +120,9 @@ interface UploadFieldProps {
 }
 
 export function UploadField({ error, fileName, onChange }: UploadFieldProps) {
+  const helpId = 'pet-photo-help'
+  const errorId = 'pet-photo-error'
+
   return (
     <div>
       <FieldLabel htmlFor="pet-photo" required>
@@ -155,13 +158,26 @@ export function UploadField({ error, fileName, onChange }: UploadFieldProps) {
         />
         <input
           accept="image/jpeg,image/png"
+          aria-describedby={`${helpId}${error ? ` ${errorId}` : ''}`}
+          aria-invalid={Boolean(error)}
           className="sr-only"
           id="pet-photo"
           onChange={onChange}
           type="file"
         />
       </label>
-      {error && <p className="mt-1 text-xs text-christmas-red">{error}</p>}
+      <span className="sr-only" id={helpId}>
+        Selecione uma imagem JPG ou PNG de até 5 MB.
+      </span>
+      {error && (
+        <p
+          className="mt-1 text-xs text-christmas-red"
+          id={errorId}
+          role="alert"
+        >
+          {error}
+        </p>
+      )}
     </div>
   )
 }

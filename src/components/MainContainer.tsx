@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import cat from '../assets/cat.png'
-import dog from '../assets/dog.png'
+import cat from '../assets/cat.webp'
+import dog from '../assets/dog.webp'
 import envelope from '../assets/envelope.svg'
 import titleArt from '../assets/querido-noel.svg'
 import type { LetterData } from '../types/letter'
